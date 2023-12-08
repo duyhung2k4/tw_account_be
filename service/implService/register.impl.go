@@ -1,6 +1,7 @@
 package impl_service
 
 import (
+	"account-service/config"
 	"account-service/dto/request"
 	"account-service/dto/response"
 	message_error "account-service/messageError"
@@ -10,11 +11,15 @@ import (
 	"account-service/utils"
 	impl_utils "account-service/utils/implUtils"
 	"errors"
+
+	"gorm.io/gorm"
 )
 
 type registerService struct {
+	db                 *gorm.DB
 	registerRepository repository.RegisterRepository
 	emailUtils         utils.EmailUtils
+	credentialUtils    utils.CredentialUtils
 }
 
 func (r *registerService) HandleSendInforegister(info request.RegisterRequest) (res *response.SaveInfoRegisterResponse, err error) {
@@ -51,9 +56,44 @@ func (r *registerService) HandleSendInforegister(info request.RegisterRequest) (
 	return &saveInfoRegister, nil
 }
 
+func (r *registerService) HandleConfirmCode(confirmInfo request.ConfirmInfo) (err error) {
+
+	saveInfo, errSaveInfo := r.registerRepository.GetSaveInfo(confirmInfo.SaveInfoId)
+	if errSaveInfo != nil {
+		return errSaveInfo
+	}
+
+	profile, errCreateProfile := r.registerRepository.CreateProfile(*saveInfo)
+	if errCreateProfile != nil {
+		return errCreateProfile
+	}
+
+	roles, errFindRole := r.credentialUtils.GetRole()
+	if errFindRole != nil {
+		return errFindRole
+	}
+
+	var roleIdCredentile *uint
+	for _, role := range roles {
+		if role.Code == saveInfo.Role {
+			roleIdCredentile = &role.Id
+			break
+		}
+	}
+	if roleIdCredentile == nil {
+		return errors.New(message_error.INVALID_ROLE)
+	}
+
+	errCreateCredential := r.registerRepository.CreateCredential(saveInfo, profile, *roleIdCredentile)
+
+	return errCreateCredential
+}
+
 func RegisterServiceInit() service.RegisterService {
 	return &registerService{
+		db:                 config.GetDB(),
 		registerRepository: impl_repository.RegisterRepositoryInit(),
 		emailUtils:         impl_utils.EmailUtilsInit(),
+		credentialUtils:    impl_utils.CredentialUtilsInit(),
 	}
 }

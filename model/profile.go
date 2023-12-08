@@ -7,11 +7,8 @@ import (
 )
 
 type Profile struct {
-	Id           uint   `json:"id" gorm:"primaryKey"`
-	Name         string `json:"name"`
-	Commune      string `json:"commune"`
-	DistrictCode string `json:"districtCode"`
-	ProvinceCode string `json:"provinceCode"`
+	Id   uint   `json:"id" gorm:"primaryKey"`
+	Name string `json:"name"`
 
 	CreatedAt time.Time `json:"createdAt" gorm:"autoCreateTime:true"`
 	DeleteAt  gorm.DeletedAt

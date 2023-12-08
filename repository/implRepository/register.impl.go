@@ -3,10 +3,13 @@ package impl_repository
 import (
 	"account-service/config"
 	"account-service/dto/request"
+	message_error "account-service/messageError"
 	"account-service/model"
 	"account-service/repository"
 	"account-service/utils"
 	impl_utils "account-service/utils/implUtils"
+	"errors"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -60,6 +63,49 @@ func (r *registerRepository) CreateSaveInfoRegister(info request.RegisterRequest
 	}
 
 	return saveRegister, nil
+}
+
+func (r *registerRepository) CreateProfile(saveInfo model.SaveRegister) (profile *model.Profile, err error) {
+	var profileCreate = &model.Profile{
+		Name: saveInfo.Username,
+	}
+
+	errCreate := r.db.Model(&model.Profile{}).Create(&profileCreate).Error
+
+	if errCreate != nil {
+		return nil, errCreate
+	}
+
+	return profileCreate, nil
+}
+
+func (r *registerRepository) CreateCredential(saveInfo *model.SaveRegister, profile *model.Profile, roleId uint) (err error) {
+	var newCredential = &model.Credential{
+		ProfileId: profile.Id,
+		Username:  saveInfo.Username,
+		Email:     saveInfo.Email,
+		Password:  saveInfo.Password,
+		RoleId:    roleId,
+	}
+
+	errCreate := r.db.Model(&model.Credential{}).Create(&newCredential).Error
+	return errCreate
+}
+
+func (r *registerRepository) GetSaveInfo(saveInfoId uint) (saveInfo *model.SaveRegister, err error) {
+	var saveInfoConfirm *model.SaveRegister
+
+	errFind := r.db.Model(&model.SaveRegister{}).Where("id = ?", saveInfoId).First(&saveInfoConfirm).Error
+	if errFind != nil {
+		return nil, errFind
+	}
+
+	inValidTime := time.Now().After(saveInfoConfirm.FinishAt)
+	if inValidTime {
+		return nil, errors.New(message_error.CODE_EXPIRED)
+	}
+
+	return saveInfoConfirm, nil
 }
 
 func RegisterRepositoryInit() repository.RegisterRepository {

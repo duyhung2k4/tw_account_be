@@ -46,7 +46,38 @@ func (re *register) SendInfoRegister(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, res)
 }
 
-func (re *register) ConfirmCodeRegister(w http.ResponseWriter, r *http.Request) {}
+// @Summary      Confirm code register
+// @Description  Confirm code register
+// @Tags         Register
+// @Accept       json
+// @Produce 		 json
+// @Param        req body request.ConfirmInfo true "Confirm code"
+// @Success      200  {object}  response.Response
+// @Router       /public/confirm_code [post]
+func (re *register) ConfirmCodeRegister(w http.ResponseWriter, r *http.Request) {
+	var confirm request.ConfirmInfo
+
+	errRequest := json.NewDecoder(r.Body).Decode(&confirm)
+
+	if errRequest != nil {
+		response.BadRequest(w, r, errRequest)
+		return
+	}
+
+	errConfirm := re.registerService.HandleConfirmCode(confirm)
+	if errConfirm != nil {
+		response.ServerError(w, r, errConfirm)
+		return
+	}
+
+	res := response.Response{
+		Data:    "",
+		Message: "OK",
+		Success: true,
+	}
+
+	render.JSON(w, r, res)
+}
 
 func RegisterCotrollerInit() controller.RegisterCotroller {
 	return &register{

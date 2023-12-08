@@ -34,6 +34,8 @@ func connect(migrate bool) (*gorm.DB, error) {
 		return nil, err
 	}
 
+	log.Println("Connected")
+
 	if migrate {
 		log.Println("Start migrate")
 		err := db.AutoMigrate(

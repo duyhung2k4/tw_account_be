@@ -7,4 +7,5 @@ import (
 
 type RegisterService interface {
 	HandleSendInforegister(info request.RegisterRequest) (res *response.SaveInfoRegisterResponse, err error)
+	HandleConfirmCode(confirmInfo request.ConfirmInfo) (err error)
 }

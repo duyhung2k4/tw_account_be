@@ -16,6 +16,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/public/confirm_code": {
+            "post": {
+                "description": "Confirm code register",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "Confirm code register",
+                "parameters": [
+                    {
+                        "description": "Confirm code",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ConfirmInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/public/send_info": {
             "post": {
                 "description": "Send info register",
@@ -62,6 +96,17 @@ const docTemplate = `{
                 "USER",
                 "ADMIN"
             ]
+        },
+        "request.ConfirmInfo": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "saveInfoId": {
+                    "type": "integer"
+                }
+            }
         },
         "request.RegisterRequest": {
             "type": "object",

@@ -2,6 +2,7 @@ package main
 
 import (
 	"account-service/config"
+	cron_handle_impl "account-service/cronHandle/cronHandleImpl"
 	_ "account-service/docs"
 	"account-service/router"
 	"log"
@@ -22,6 +23,8 @@ func main() {
 		ReadTimeout:  6000 * time.Second,
 		WriteTimeout: 6000 * time.Second,
 	}
+
+	cron_handle_impl.CronRun()
 
 	log.Fatal(server.ListenAndServe())
 }
