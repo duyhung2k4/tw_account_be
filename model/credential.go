@@ -10,7 +10,7 @@ type Credential struct {
 	Id        uint   `json:"id" gorm:"primaryKey"`
 	RoleId    uint   `json:"roleId"`
 	ProfileId uint   `json:"profileId"`
-	Username  string `json:"username"`
+	Username  string `json:"username" gorm:"unique"`
 	Email     string `json:"email" gorm:"unique"`
 	Password  string `json:"password"`
 

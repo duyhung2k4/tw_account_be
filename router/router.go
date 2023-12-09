@@ -19,7 +19,7 @@ func Router() http.Handler {
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		ExposedHeaders:   []string{"Link"},
+		ExposedHeaders:   []string{"Set-Cookie"},
 		AllowCredentials: true,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	})
@@ -31,11 +31,14 @@ func Router() http.Handler {
 	r.Use(cors.Handler)
 
 	register := impl_controller.RegisterCotrollerInit()
+	login := impl_controller.LoginControllerInit()
 
 	r.Route("/api/v1", func(v1 chi.Router) {
 		v1.Route("/public", func(public chi.Router) {
 			public.Post("/send_info", register.SendInfoRegister)
 			public.Post("/confirm_code", register.ConfirmCodeRegister)
+
+			public.Post("/login", login.Login)
 		})
 	})
 

@@ -50,6 +50,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/public/login": {
+            "post": {
+                "description": "Send info login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Send info login",
+                "parameters": [
+                    {
+                        "description": "Send info",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/public/send_info": {
             "post": {
                 "description": "Send info register",
@@ -105,6 +139,17 @@ const docTemplate = `{
                 },
                 "saveInfoId": {
                     "type": "integer"
+                }
+            }
+        },
+        "request.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },
