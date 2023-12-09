@@ -11,7 +11,7 @@ type Credential struct {
 	RoleId    uint   `json:"roleId"`
 	ProfileId uint   `json:"profileId"`
 	Username  string `json:"username"`
-	Email     string `json:"email"`
+	Email     string `json:"email" gorm:"unique"`
 	Password  string `json:"password"`
 
 	Profile *Profile `json:"profile" gorm:"foreignKey:ProfileId;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`

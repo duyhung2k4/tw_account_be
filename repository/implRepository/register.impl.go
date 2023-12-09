@@ -23,13 +23,13 @@ type registerRepository struct {
 func (r *registerRepository) CheckExistEmail(email string) (ok bool, err error) {
 	var creadential *model.Credential
 
-	errCredential := r.db.Model(&model.Credential{}).Where("email = ?", email).Find(&creadential).Error
+	errCredential := r.db.Model(&model.Credential{}).Where("email = ?", email).First(&creadential).Error
 
-	if errCredential != nil {
+	if errCredential != nil && errCredential.Error() != message_error.RECORD_NOT_FOUND {
 		return false, errCredential
 	}
 
-	if creadential != nil {
+	if creadential.Id != 0 {
 		return true, nil
 	}
 

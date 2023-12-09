@@ -30,7 +30,7 @@ func (r *registerService) HandleSendInforegister(info request.RegisterRequest) (
 		return nil, errCheckEmail
 	}
 
-	if !ok {
+	if ok {
 		return nil, errors.New(message_error.EMAIL_EXIST)
 	}
 
@@ -64,6 +64,10 @@ func (r *registerService) HandleConfirmCode(confirmInfo request.ConfirmInfo) (er
 	saveInfo, errSaveInfo := r.registerRepository.GetSaveInfo(confirmInfo.SaveInfoId)
 	if errSaveInfo != nil {
 		return errSaveInfo
+	}
+
+	if confirmInfo.Code != saveInfo.Code {
+		return errors.New(message_error.ERROR_CODE)
 	}
 
 	profile, errCreateProfile := r.registerRepository.CreateProfile(*saveInfo)
