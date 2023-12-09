@@ -16,8 +16,8 @@ type cronHandle struct {
 }
 
 func (c *cronHandle) CheckTimeSaveInfoRegister() {
-	var listSaveInfo []*model.SaveRegister
-	var listSaveInfoRemove []*model.SaveRegister
+	var listSaveInfo []model.SaveRegister
+	var listSaveInfoRemove []model.SaveRegister
 
 	errFind := c.db.Model(&model.SaveRegister{}).Find(&listSaveInfo).Error
 	if errFind != nil {
@@ -27,13 +27,17 @@ func (c *cronHandle) CheckTimeSaveInfoRegister() {
 
 	timeNow := time.Now()
 	for _, info := range listSaveInfo {
-		ok := timeNow.Before(info.FinishAt)
+		ok := timeNow.After(info.FinishAt)
 		if ok {
 			listSaveInfoRemove = append(listSaveInfoRemove, info)
 		}
 	}
 
-	errDelete := c.db.Model(&model.SaveRegister{}).Delete(&listSaveInfoRemove).Error
+	if len(listSaveInfoRemove) == 0 {
+		return
+	}
+
+	errDelete := c.db.Model(&model.SaveRegister{}).Unscoped().Delete(&listSaveInfoRemove).Error
 	if errDelete != nil {
 		log.Println(errDelete)
 	}
@@ -50,7 +54,7 @@ func CronRun() {
 
 	c := cron.New()
 
-	c.AddFunc("@every 1m", handleCron.CheckTimeSaveInfoRegister)
+	c.AddFunc("@every 5m", handleCron.CheckTimeSaveInfoRegister)
 
 	c.Start()
 	log.Println("Start Cron")

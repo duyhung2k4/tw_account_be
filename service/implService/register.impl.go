@@ -49,6 +49,9 @@ func (r *registerService) HandleSendInforegister(info request.RegisterRequest) (
 	saveInfoRegister := response.SaveInfoRegisterResponse{
 		Id:       newInfo.Id,
 		Email:    newInfo.Email,
+		Username: newInfo.Username,
+		Password: info.Password,
+		Role:     info.Role,
 		StartAt:  newInfo.StartAt,
 		FinishAt: newInfo.FinishAt,
 	}
