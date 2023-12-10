@@ -18,6 +18,6 @@ type Credential struct {
 	Role    *Role    `json:"role" gorm:"foreignKey:RoleId;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 
 	CreatedAt time.Time      `json:"createdAt" gorm:"autoCreateTime:true"`
-	DeleteAt  gorm.DeletedAt `json:"_"`
+	DeleteAt  gorm.DeletedAt `json:"-"`
 	UpdatedAt time.Time      `json:"updatedAt" gorm:"autoUpdateTime:true"`
 }
