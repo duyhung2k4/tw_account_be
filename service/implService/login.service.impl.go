@@ -18,6 +18,12 @@ func (l *loginService) CheckCredential(info request.LoginRequest) (credential *m
 	return newCredential, errCredential
 }
 
+func (l *loginService) FindCredential(id uint) (credential *model.Credential, err error) {
+	newCredential, errCredential := l.loginRepo.FindCredentialId(id)
+
+	return newCredential, errCredential
+}
+
 func LoginServiceInit() service.LoginService {
 	return &loginService{
 		loginRepo: impl_repository.LoginRepositoryInit(),

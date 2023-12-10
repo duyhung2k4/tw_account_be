@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/go-chi/jwtauth/v5"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
@@ -39,6 +40,13 @@ func Router() http.Handler {
 			public.Post("/confirm_code", register.ConfirmCodeRegister)
 
 			public.Post("/login", login.Login)
+		})
+
+		v1.Route("/protected", func(protected chi.Router) {
+			protected.Use(jwtauth.Verifier(config.GetJWT()))
+			protected.Use(jwtauth.Authenticator(config.GetJWT()))
+
+			protected.Post("/login_token", login.LoginToken)
 		})
 	})
 

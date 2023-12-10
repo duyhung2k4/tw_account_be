@@ -39,6 +39,23 @@ func (l *loginRepository) FindCredential(info request.LoginRequest) (credential 
 	return newCredential, nil
 }
 
+func (l *loginRepository) FindCredentialId(id uint) (credential *model.Credential, err error) {
+	var newCredential *model.Credential
+
+	errCredential := l.db.
+		Model(&model.Credential{}).
+		Preload("Role").
+		Preload("Profile").
+		Where("id = ?", id).
+		First(&newCredential).Error
+
+	if err != nil {
+		return nil, errCredential
+	}
+
+	return newCredential, nil
+}
+
 func LoginRepositoryInit() repository.LoginRepository {
 	return &loginRepository{
 		db:             config.GetDB(),

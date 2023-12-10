@@ -7,4 +7,5 @@ import (
 
 type LoginRepository interface {
 	FindCredential(info request.LoginRequest) (credential *model.Credential, err error)
+	FindCredentialId(id uint) (credential *model.Credential, err error)
 }

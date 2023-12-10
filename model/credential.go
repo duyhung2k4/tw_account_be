@@ -12,12 +12,12 @@ type Credential struct {
 	ProfileId uint   `json:"profileId"`
 	Username  string `json:"username" gorm:"unique"`
 	Email     string `json:"email" gorm:"unique"`
-	Password  string `json:"password"`
+	Password  string `json:"-"`
 
 	Profile *Profile `json:"profile" gorm:"foreignKey:ProfileId;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 	Role    *Role    `json:"role" gorm:"foreignKey:RoleId;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 
-	CreatedAt time.Time `json:"createdAt" gorm:"autoCreateTime:true"`
-	DeleteAt  gorm.DeletedAt
-	UpdatedAt time.Time `json:"updatedAt" gorm:"autoUpdateTime:true"`
+	CreatedAt time.Time      `json:"createdAt" gorm:"autoCreateTime:true"`
+	DeleteAt  gorm.DeletedAt `json:"_"`
+	UpdatedAt time.Time      `json:"updatedAt" gorm:"autoUpdateTime:true"`
 }
