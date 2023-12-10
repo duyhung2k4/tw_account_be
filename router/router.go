@@ -31,22 +31,26 @@ func Router() http.Handler {
 	r.Use(middleware.Recoverer)
 	r.Use(cors.Handler)
 
-	register := impl_controller.RegisterCotrollerInit()
-	login := impl_controller.LoginControllerInit()
+	registerController := impl_controller.RegisterCotrollerInit()
+	loginController := impl_controller.LoginControllerInit()
+	projectController := impl_controller.ProjectControllerInit()
 
 	r.Route("/api/v1", func(v1 chi.Router) {
 		v1.Route("/public", func(public chi.Router) {
-			public.Post("/send_info", register.SendInfoRegister)
-			public.Post("/confirm_code", register.ConfirmCodeRegister)
+			public.Post("/send_info", registerController.SendInfoRegister)
+			public.Post("/confirm_code", registerController.ConfirmCodeRegister)
 
-			public.Post("/login", login.Login)
+			public.Post("/login", loginController.Login)
 		})
 
 		v1.Route("/protected", func(protected chi.Router) {
 			protected.Use(jwtauth.Verifier(config.GetJWT()))
 			protected.Use(jwtauth.Authenticator(config.GetJWT()))
 
-			protected.Post("/login_token", login.LoginToken)
+			protected.Post("/login_token", loginController.LoginToken)
+			protected.Route("/project", func(project chi.Router) {
+				project.Get("/creater_id", projectController.GetProjectByCreaterId)
+			})
 		})
 	})
 

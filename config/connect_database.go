@@ -43,6 +43,10 @@ func connect(migrate bool) (*gorm.DB, error) {
 			&model.Credential{},
 			&model.Role{},
 			&model.SaveRegister{},
+			&model.Project{},
+			&model.ProjectProfile{},
+			&model.Task{},
+			&model.TaskProfile{},
 		)
 
 		if err != nil {

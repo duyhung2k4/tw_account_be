@@ -16,7 +16,7 @@ type SaveRegister struct {
 	StartAt  time.Time `json:"startAt"`
 	FinishAt time.Time `json:"finishAt"`
 
-	CreatedAt time.Time `json:"createdAt" gorm:"autoCreateTime:true"`
-	DeleteAt  gorm.DeletedAt
-	UpdatedAt time.Time `json:"updatedAt" gorm:"autoUpdateTime:true"`
+	CreatedAt time.Time      `json:"createdAt" gorm:"autoCreateTime:true"`
+	DeleteAt  gorm.DeletedAt `json:"-"`
+	UpdatedAt time.Time      `json:"updatedAt" gorm:"autoUpdateTime:true"`
 }

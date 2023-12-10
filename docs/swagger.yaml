@@ -50,6 +50,27 @@ info:
   title: Swagger Account API
   version: "1.0"
 paths:
+  /protected/project/creater_id:
+    get:
+      consumes:
+      - application/json
+      description: Get project by createrId
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get project by createrId
+      tags:
+      - Project
   /public/confirm_code:
     post:
       consumes:
