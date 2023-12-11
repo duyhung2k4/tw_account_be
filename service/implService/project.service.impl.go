@@ -22,8 +22,13 @@ func (p *projectService) GetProjectJoined(id uint) (projects []model.Project, er
 	return listProject, errProject
 }
 
-func (p *projectService) GetProjectById(id uint) (project *model.Project, err error) {
-	simpleProject, errProject := p.projectRepo.GetProjectById(id)
+func (p *projectService) GetProjectJoinedById(id uint, credentialId uint) (project *model.Project, err error) {
+	simpleProject, errProject := p.projectRepo.GetProjectJoinedById(id, project.CreaterId)
+	return simpleProject, errProject
+}
+
+func (p *projectService) GetProjectCreaterById(id uint, credentialId uint) (project *model.Project, err error) {
+	simpleProject, errProject := p.projectRepo.GetProjectCreaterById(id, credentialId)
 	return simpleProject, errProject
 }
 
@@ -33,7 +38,7 @@ func (p *projectService) CreateProject(req request.NewProjectRequest) (project *
 }
 
 func (p *projectService) DeleteProject(req request.DeleteProjectRequest) (err error) {
-	errDelete := p.projectRepo.DeleteProject(req.Id)
+	errDelete := p.projectRepo.DeleteProject(req)
 	return errDelete
 }
 

@@ -50,6 +50,11 @@ func Router() http.Handler {
 			protected.Post("/login_token", loginController.LoginToken)
 			protected.Route("/project", func(project chi.Router) {
 				project.Get("/creater_id", projectController.GetProjectByCreaterId)
+				project.Get("/creater_id_detail/{id}", projectController.GetProjectCreaterById)
+				project.Get("/joined", projectController.GetProjectJoined)
+				project.Get("/joined_detail/{id}", projectController.GetProjectJoinedById)
+				project.Post("/create", projectController.CreateProject)
+				project.Delete("/delete", projectController.DeleteProject)
 			})
 		})
 	})

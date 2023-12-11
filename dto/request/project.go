@@ -1,7 +1,8 @@
 package request
 
 type DeleteProjectRequest struct {
-	Id uint `json:"id"`
+	Id        uint `json:"id"`
+	CreaterId uint `json:"createrId"`
 }
 
 type NewProjectRequest struct {

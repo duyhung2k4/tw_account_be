@@ -15,10 +15,13 @@ type projectRepository struct {
 	db *gorm.DB
 }
 
-func (p *projectRepository) GetProjectById(id uint) (project *model.Project, err error) {
+func (p *projectRepository) GetProjectCreaterById(id uint, credentialId uint) (project *model.Project, err error) {
 	var simpleProject *model.Project
 
-	errProject := p.db.Model(&model.Project{}).Where("id = ?", id).First(&simpleProject).Error
+	errProject := p.db.
+		Model(&model.Project{}).
+		Where("id = ? AND creater_id = ?", id, credentialId).
+		First(&simpleProject).Error
 
 	if errProject != nil && errProject.Error() != message_error.RECORD_NOT_FOUND {
 		return nil, errProject
@@ -52,6 +55,22 @@ func (p *projectRepository) GetProjectJoined(id uint) (projects []model.Project,
 	return listProject, nil
 }
 
+func (p *projectRepository) GetProjectJoinedById(id uint, credentialId uint) (project *model.Project, err error) {
+	var simpleProjectProfile *model.ProjectProfile
+	var simpleProject *model.Project
+
+	errProject := p.db.
+		Model(&model.ProjectProfile{}).
+		Where("project_id = ? AND profile_id = ?", id, credentialId).
+		First(&simpleProjectProfile).Error
+	if errProject != nil && errProject.Error() != message_error.RECORD_NOT_FOUND {
+		return nil, errProject
+	}
+
+	simpleProject = simpleProjectProfile.Project
+	return simpleProject, nil
+}
+
 func (p *projectRepository) CreateProject(req request.NewProjectRequest) (project *model.Project, err error) {
 	var newProject = &model.Project{
 		CreaterId: req.CreaterId,
@@ -76,9 +95,10 @@ func (p *projectRepository) CreateProject(req request.NewProjectRequest) (projec
 	return newProject, nil
 }
 
-func (p *projectRepository) DeleteProject(id uint) (err error) {
+func (p *projectRepository) DeleteProject(req request.DeleteProjectRequest) (err error) {
 	var projectDelete = &model.Project{
-		Id: id,
+		Id:        req.Id,
+		CreaterId: req.CreaterId,
 	}
 
 	errDelete := p.db.Model(&model.Project{}).Delete(&projectDelete).Error
