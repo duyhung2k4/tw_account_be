@@ -34,6 +34,8 @@ func Router() http.Handler {
 	registerController := impl_controller.RegisterCotrollerInit()
 	loginController := impl_controller.LoginControllerInit()
 	projectController := impl_controller.ProjectControllerInit()
+	accountController := impl_controller.AccountControllerInit()
+	taskController := impl_controller.TaskControllerInit()
 
 	r.Route("/api/v1", func(v1 chi.Router) {
 		v1.Route("/public", func(public chi.Router) {
@@ -48,6 +50,7 @@ func Router() http.Handler {
 			protected.Use(jwtauth.Authenticator(config.GetJWT()))
 
 			protected.Post("/login_token", loginController.LoginToken)
+
 			protected.Route("/project", func(project chi.Router) {
 				project.Get("/creater_id", projectController.GetProjectByCreaterId)
 				project.Get("/creater_id_detail/{id}", projectController.GetProjectCreaterById)
@@ -56,6 +59,21 @@ func Router() http.Handler {
 				project.Post("/create", projectController.CreateProject)
 				project.Delete("/delete", projectController.DeleteProject)
 			})
+
+			protected.Route("/account", func(account chi.Router) {
+				account.Post("/get_account", accountController.GetAccount)
+				account.Post("/add_to_project", accountController.AddUserToProject)
+			})
+
+			protected.Route("/task", func(task chi.Router) {
+				task.Get("/{id}", taskController.GetTaskOfProject)
+				task.Post("/create", taskController.CreateTask)
+				task.Put("/update", taskController.UpdateStatusTask)
+				task.Delete("/delete", taskController.DeleteTask)
+				task.Post("/add_user", taskController.AddUserToTask)
+				task.Delete("/remove_user", taskController.RemoveUserToTask)
+			})
+
 		})
 	})
 

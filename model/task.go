@@ -9,14 +9,16 @@ import (
 type Task struct {
 	Id        uint      `json:"id"`
 	CreaterId uint      `json:"createrId"`
+	ProjectId uint      `json:"projectId"`
 	Name      string    `json:"name"`
 	Level     string    `json:"level"`
 	StartAt   time.Time `json:"startAt"`
 	FinishAt  time.Time `json:"finishAt"`
-	Status    string    `json:"status"`
+	Status    STATUS    `json:"status"`
 	Detail    string    `json:"detail"`
 
 	Creater *Profile `json:"creater" gorm:"foreign:CreaterId; constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	Project *Project `json:"project" gorm:"foreign:ProjectId; constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 
 	CreatedAt time.Time      `json:"createdAt" gorm:"autoCreateTime:true"`
 	DeleteAt  gorm.DeletedAt `json:"-"`

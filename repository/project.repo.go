@@ -10,6 +10,7 @@ type ProjectRepository interface {
 	GetProjectByCreaterId(id uint) (projects []model.Project, err error)
 	GetProjectJoined(id uint) (projects []model.Project, err error)
 	GetProjectJoinedById(id uint, credentialId uint) (project *model.Project, err error)
+	CheckProjectOfCredential(credentialId uint, projectId uint) (ok bool, err error)
 	CreateProject(req request.NewProjectRequest) (project *model.Project, err error)
 	DeleteProject(req request.DeleteProjectRequest) (err error)
 }

@@ -106,6 +106,21 @@ func (p *projectRepository) DeleteProject(req request.DeleteProjectRequest) (err
 	return errDelete
 }
 
+func (p *projectRepository) CheckProjectOfCredential(credentialId uint, projectId uint) (ok bool, err error) {
+	var project *model.Project
+
+	errProject := p.db.Model(&model.Project{}).Where("id = ? AND creater_id = ?", projectId, credentialId).First(&project).Error
+	if errProject != nil && errProject.Error() != message_error.RECORD_NOT_FOUND {
+		return false, errProject
+	}
+
+	if project.Id == 0 || project == nil {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 func ProjectRepositoryInit() repository.ProjectRepository {
 	return &projectRepository{
 		db: config.GetDB(),
