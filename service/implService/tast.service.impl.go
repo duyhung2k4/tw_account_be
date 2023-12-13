@@ -38,8 +38,13 @@ func (t *taskService) AddUserToTask(req request.AddUserToTaskRequest) (taskProfi
 }
 
 func (t *taskService) RemoveUserToTask(req request.RemoveUserToTaskRequest) (err error) {
-	errDelete := t.taskRepo.RemoveUserToTask(req.TaskProfileId, req.CredentialId, req.TaskId)
+	errDelete := t.taskRepo.RemoveUserToTask(req.CredentialId, req.TaskId)
 	return errDelete
+}
+
+func (t *taskService) GetAllUserOfTask() (taskProfiles []model.TaskProfile, err error) {
+	data, errData := t.taskRepo.GetAllUserOfTask()
+	return data, errData
 }
 
 func TaskServiceInit() service.TaskService {

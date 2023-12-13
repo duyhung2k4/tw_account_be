@@ -71,6 +71,8 @@ func Router() http.Handler {
 				task.Post("/create", taskController.CreateTask)
 				task.Put("/update", taskController.UpdateStatusTask)
 				task.Delete("/delete", taskController.DeleteTask)
+
+				task.Get("/all_user_task", taskController.GetAllUserOfTask)
 				task.Post("/add_user", taskController.AddUserToTask)
 				task.Delete("/remove_user", taskController.RemoveUserToTask)
 			})

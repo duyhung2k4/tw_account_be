@@ -170,6 +170,22 @@ func (t *taskController) RemoveUserToTask(w http.ResponseWriter, r *http.Request
 	render.JSON(w, r, res)
 }
 
+func (t *taskController) GetAllUserOfTask(w http.ResponseWriter, r *http.Request) {
+	data, err := t.taskService.GetAllUserOfTask()
+	if err != nil {
+		response.ServerError(w, r, err)
+		return
+	}
+
+	res := response.Response{
+		Data:    data,
+		Success: true,
+		Message: "OK",
+		Error:   "",
+	}
+
+	render.JSON(w, r, res)
+}
 func TaskControllerInit() controller.TaskController {
 	return &taskController{
 		taskService: impl_service.TaskServiceInit(),

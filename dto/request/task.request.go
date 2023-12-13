@@ -31,7 +31,6 @@ type AddUserToTaskRequest struct {
 }
 
 type RemoveUserToTaskRequest struct {
-	TaskProfileId uint `json:"taskProfileId"`
-	CredentialId  uint `json:"credentialId"`
-	TaskId        uint `json:"taskId"`
+	CredentialId uint `json:"credentialId"`
+	TaskId       uint `json:"taskId"`
 }

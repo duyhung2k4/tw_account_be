@@ -9,4 +9,5 @@ type TaskController interface {
 	DeleteTask(w http.ResponseWriter, r *http.Request)
 	AddUserToTask(w http.ResponseWriter, r *http.Request)
 	RemoveUserToTask(w http.ResponseWriter, r *http.Request)
+	GetAllUserOfTask(w http.ResponseWriter, r *http.Request)
 }

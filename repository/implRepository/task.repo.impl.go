@@ -68,15 +68,19 @@ func (t *taskRepository) AddUserToTask(credentialId uint, taskId uint) (taskProf
 	return newTaskProfile, errCreate
 }
 
-func (t *taskRepository) RemoveUserToTask(taskProfileId uint, credentialId uint, taskId uint) (err error) {
-	userRemove := &model.TaskProfile{
-		Id:            taskProfileId,
-		TaskId:        taskId,
-		ImplementerId: credentialId,
-	}
-
-	errDelete := t.db.Model(&model.TaskProfile{}).Delete(&userRemove).Error
+func (t *taskRepository) RemoveUserToTask(credentialId uint, taskId uint) (err error) {
+	errDelete := t.db.
+		Model(&model.TaskProfile{}).
+		Where("task_id = ? AND implementer_id = ?", taskId, credentialId).
+		Delete(&model.TaskProfile{}).Error
 	return errDelete
+}
+
+func (t *taskRepository) GetAllUserOfTask() (taskProfiles []model.TaskProfile, err error) {
+	var data []model.TaskProfile
+
+	errData := t.db.Model(&model.TaskProfile{}).Find(&data).Error
+	return data, errData
 }
 
 func TaskRepositoryInit() repository.TaskRepository {
