@@ -23,7 +23,7 @@ func (p *projectService) GetProjectJoined(id uint) (projects []model.Project, er
 }
 
 func (p *projectService) GetProjectJoinedById(id uint, credentialId uint) (project *model.Project, err error) {
-	simpleProject, errProject := p.projectRepo.GetProjectJoinedById(id, project.CreaterId)
+	simpleProject, errProject := p.projectRepo.GetProjectJoinedById(id, credentialId)
 	return simpleProject, errProject
 }
 

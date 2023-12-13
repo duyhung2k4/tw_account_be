@@ -23,7 +23,7 @@ func (p *projectRepository) GetProjectCreaterById(id uint, credentialId uint) (p
 		Where("id = ? AND creater_id = ?", id, credentialId).
 		First(&simpleProject).Error
 
-	if errProject != nil && errProject.Error() != message_error.RECORD_NOT_FOUND {
+	if errProject != nil {
 		return nil, errProject
 	}
 
@@ -68,9 +68,10 @@ func (p *projectRepository) GetProjectJoinedById(id uint, credentialId uint) (pr
 
 	errProject := p.db.
 		Model(&model.ProjectProfile{}).
+		Preload("Project").
 		Where("project_id = ? AND profile_id = ?", id, credentialId).
 		First(&simpleProjectProfile).Error
-	if errProject != nil && errProject.Error() != message_error.RECORD_NOT_FOUND {
+	if errProject != nil {
 		return nil, errProject
 	}
 
