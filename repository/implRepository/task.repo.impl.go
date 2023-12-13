@@ -16,7 +16,12 @@ type taskRepository struct {
 func (t *taskRepository) GetTaskOfProject(projectId uint) (task []model.Task, err error) {
 	var listTask []model.Task
 
-	errListTask := t.db.Model(&model.Task{}).Where("project_id = ?", projectId).Find(&listTask).Error
+	errListTask := t.db.
+		Model(&model.Task{}).
+		Preload("Creater").
+		Preload("Project").
+		Where("project_id = ?", projectId).
+		Find(&listTask).Error
 
 	return listTask, errListTask
 }
@@ -46,13 +51,10 @@ func (t *taskRepository) DeleteTask(taskId uint) (err error) {
 	return errDelete
 }
 
-func (t *taskRepository) UpdateStatusTask(taskId uint, status model.STATUS) (newTask *model.Task, err error) {
-	taskUpdate := &model.Task{
-		Id:     taskId,
-		Status: status,
-	}
+func (t *taskRepository) UpdateStatusTask(req model.Task) (newTask *model.Task, err error) {
+	taskUpdate := &req
 
-	errUpdate := t.db.Model(&model.Task{}).Updates(&taskUpdate).Error
+	errUpdate := t.db.Model(&model.Task{}).Where("id = ?", req.Id).Updates(&taskUpdate).Error
 	return taskUpdate, errUpdate
 }
 

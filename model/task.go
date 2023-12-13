@@ -11,7 +11,7 @@ type Task struct {
 	CreaterId uint      `json:"createrId"`
 	ProjectId uint      `json:"projectId"`
 	Name      string    `json:"name"`
-	Level     string    `json:"level"`
+	Level     LEVEL     `json:"level"`
 	StartAt   time.Time `json:"startAt"`
 	FinishAt  time.Time `json:"finishAt"`
 	Status    STATUS    `json:"status"`
@@ -34,4 +34,13 @@ const (
 	CANCELED        STATUS = "canceled"
 	WILL_BE_CHECKED STATUS = "will_be_checked"
 	LOOKING_BACK    STATUS = "looking_back"
+)
+
+type LEVEL string
+
+const (
+	HIGH   LEVEL = "high"
+	MEDIUM LEVEL = "medium"
+	LOW    LEVEL = "low"
+	NONE   LEVEL = "none"
 )

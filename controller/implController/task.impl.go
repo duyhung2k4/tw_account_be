@@ -4,6 +4,7 @@ import (
 	"account-service/controller"
 	"account-service/dto/request"
 	"account-service/dto/response"
+	"account-service/model"
 	"account-service/service"
 	impl_service "account-service/service/implService"
 	"encoding/json"
@@ -69,7 +70,7 @@ func (t *taskController) CreateTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *taskController) UpdateStatusTask(w http.ResponseWriter, r *http.Request) {
-	var taskUpdate request.UpdateStatusTaskRequest
+	var taskUpdate model.Task
 	err := json.NewDecoder(r.Body).Decode(&taskUpdate)
 
 	if err != nil {

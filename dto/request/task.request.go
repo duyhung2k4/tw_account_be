@@ -9,7 +9,7 @@ type CreateTaskRequest struct {
 	CreaterId uint         `json:"createrId"`
 	ProjectId uint         `json:"projectId"`
 	Name      string       `json:"name"`
-	Level     string       `json:"level"`
+	Level     model.LEVEL  `json:"level"`
 	StartAt   time.Time    `json:"startAt"`
 	FinishAt  time.Time    `json:"finishAt"`
 	Status    model.STATUS `json:"status"`

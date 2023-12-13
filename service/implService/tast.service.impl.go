@@ -27,8 +27,8 @@ func (t *taskService) DeleteTask(taskId uint) (err error) {
 	return errDelete
 }
 
-func (t *taskService) UpdateStatusTask(req request.UpdateStatusTaskRequest) (newTask *model.Task, err error) {
-	tastUpdate, errUpdate := t.taskRepo.UpdateStatusTask(req.TaskId, req.Status)
+func (t *taskService) UpdateStatusTask(req model.Task) (newTask *model.Task, err error) {
+	tastUpdate, errUpdate := t.taskRepo.UpdateStatusTask(req)
 	return tastUpdate, errUpdate
 }
 

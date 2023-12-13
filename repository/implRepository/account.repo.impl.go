@@ -21,11 +21,11 @@ func (a *accountRepository) FindAccount(req request.FindAccountRequest) (creaden
 	sql := ""
 
 	if req.Username != "" {
-		sql = "username LIKE '" + req.Username + "%'"
+		sql = "username LIKE '%" + req.Username + "%'"
 	}
 
 	if req.Email != "" {
-		sql = "email LIKE '" + req.Email + "%'"
+		sql = "email LIKE '%" + req.Email + "%'"
 	}
 
 	if sql == "" {
