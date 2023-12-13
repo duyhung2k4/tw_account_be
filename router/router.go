@@ -53,14 +53,15 @@ func Router() http.Handler {
 
 			protected.Route("/project", func(project chi.Router) {
 				project.Get("/creater_id", projectController.GetProjectByCreaterId)
-				project.Get("/creater_id_detail/{id}", projectController.GetProjectCreaterById)
 				project.Get("/joined", projectController.GetProjectJoined)
+				project.Get("/creater_id_detail/{id}", projectController.GetProjectCreaterById)
 				project.Get("/joined_detail/{id}", projectController.GetProjectJoinedById)
 				project.Post("/create", projectController.CreateProject)
 				project.Delete("/delete", projectController.DeleteProject)
 			})
 
 			protected.Route("/account", func(account chi.Router) {
+				account.Get("/get_account_project/{id}", accountController.GetUserProject)
 				account.Post("/get_account", accountController.GetAccount)
 				account.Post("/add_to_project", accountController.AddUserToProject)
 			})

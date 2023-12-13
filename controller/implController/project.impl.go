@@ -37,8 +37,8 @@ func (p *projectController) GetProjectByCreaterId(w http.ResponseWriter, r *http
 		return
 	}
 
-	credentialId := uint(mapData["id"].(float64))
-	projects, errProjects := p.projectService.GetProjectByCreaterId(credentialId)
+	profileId := uint(mapData["profileId"].(float64))
+	projects, errProjects := p.projectService.GetProjectByCreaterId(profileId)
 	if errProjects != nil {
 		response.ServerError(w, r, errProjects)
 		return
@@ -78,8 +78,8 @@ func (p *projectController) GetProjectCreaterById(w http.ResponseWriter, r *http
 		return
 	}
 
-	credentialId := uint(mapData["id"].(float64))
-	project, errProject := p.projectService.GetProjectCreaterById(projectId, credentialId)
+	profileId := uint(mapData["profileId"].(float64))
+	project, errProject := p.projectService.GetProjectCreaterById(projectId, profileId)
 	if errProject != nil {
 		response.ServerError(w, r, errProject)
 		return
@@ -111,8 +111,8 @@ func (p *projectController) GetProjectJoined(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	credentialId := uint(mapData["id"].(float64))
-	projects, errProjects := p.projectService.GetProjectJoined(credentialId)
+	profileId := uint(mapData["profileId"].(float64))
+	projects, errProjects := p.projectService.GetProjectJoined(profileId)
 	if errProjects != nil {
 		response.ServerError(w, r, errProjects)
 		return
@@ -152,8 +152,8 @@ func (p *projectController) GetProjectJoinedById(w http.ResponseWriter, r *http.
 		return
 	}
 
-	credentialId := uint(mapData["id"].(float64))
-	project, errProject := p.projectService.GetProjectJoinedById(projectId, credentialId)
+	profileId := uint(mapData["profileId"].(float64))
+	project, errProject := p.projectService.GetProjectJoinedById(projectId, profileId)
 	if errProject != nil {
 		response.ServerError(w, r, errProject)
 		return
@@ -192,9 +192,9 @@ func (p *projectController) CreateProject(w http.ResponseWriter, r *http.Request
 		response.ServerError(w, r, errProject)
 		return
 	}
-	credentialId := uint(mapData["id"].(float64))
+	profileId := uint(mapData["profileId"].(float64))
 
-	newProject.CreaterId = credentialId
+	newProject.CreaterId = profileId
 
 	newProjectReturn, errNewProjectReturn := p.projectService.CreateProject(newProject)
 	if errNewProjectReturn != nil {
@@ -235,8 +235,8 @@ func (p *projectController) DeleteProject(w http.ResponseWriter, r *http.Request
 		response.ServerError(w, r, errProject)
 		return
 	}
-	credentialId := uint(mapData["id"].(float64))
-	deleteProject.CreaterId = credentialId
+	profileId := uint(mapData["profileId"].(float64))
+	deleteProject.CreaterId = profileId
 
 	errDelete := p.projectService.DeleteProject(deleteProject)
 	if errDelete != nil {

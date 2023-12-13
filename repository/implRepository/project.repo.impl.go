@@ -33,7 +33,10 @@ func (p *projectRepository) GetProjectCreaterById(id uint, credentialId uint) (p
 func (p *projectRepository) GetProjectByCreaterId(id uint) (projects []model.Project, err error) {
 	var listProject []model.Project
 
-	errProjects := p.db.Model(&model.Project{}).Where("creater_id = ?", id).Find(&listProject).Error
+	errProjects := p.db.
+		Model(&model.Project{}).
+		Preload("Creater").
+		Where("creater_id = ?", id).Find(&listProject).Error
 
 	return listProject, errProjects
 }
@@ -42,7 +45,11 @@ func (p *projectRepository) GetProjectJoined(id uint) (projects []model.Project,
 	var listProject []model.Project
 	var listProjectProfile []model.ProjectProfile
 
-	errProjectProfile := p.db.Model(&model.ProjectProfile{}).Where("profile_id = ?", id).Find(&listProjectProfile).Error
+	errProjectProfile := p.db.
+		Model(&model.ProjectProfile{}).
+		Preload("Project").
+		Preload("Project.Creater").
+		Where("profile_id = ?", id).Find(&listProjectProfile).Error
 
 	if errProjectProfile != nil && errProjectProfile.Error() != message_error.RECORD_NOT_FOUND {
 		return listProject, errProjectProfile
@@ -75,6 +82,7 @@ func (p *projectRepository) CreateProject(req request.NewProjectRequest) (projec
 	var newProject = &model.Project{
 		CreaterId: req.CreaterId,
 		Name:      req.Name,
+		Code:      "",
 	}
 
 	errCreate := p.db.Model(&model.Project{}).Create(&newProject).Error

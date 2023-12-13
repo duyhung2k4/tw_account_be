@@ -8,7 +8,9 @@ import (
 	impl_service "account-service/service/implService"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 )
 
@@ -58,6 +60,32 @@ func (a *accountController) AddUserToProject(w http.ResponseWriter, r *http.Requ
 
 	res := response.Response{
 		Data:    newProjectProfile,
+		Message: "OK",
+		Success: true,
+		Error:   "",
+	}
+
+	render.JSON(w, r, res)
+}
+
+func (a *accountController) GetUserProject(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	projectId64, errProjectId := strconv.ParseUint(idParam, 10, 64)
+
+	if errProjectId != nil {
+		response.BadRequest(w, r, errProjectId)
+		return
+	}
+
+	projectId := uint(projectId64)
+	listCredential, errListCredential := a.accountService.GetUserProject(projectId)
+	if errListCredential != nil {
+		response.ServerError(w, r, errListCredential)
+		return
+	}
+
+	res := response.Response{
+		Data:    listCredential,
 		Message: "OK",
 		Success: true,
 		Error:   "",

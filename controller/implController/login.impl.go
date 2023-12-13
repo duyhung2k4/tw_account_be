@@ -47,11 +47,12 @@ func (l *loginController) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token, errToken := l.tokenUtils.CreateToken(map[string]interface{}{
-		"id":       credential.Id,
-		"email":    credential.Email,
-		"userName": credential.Username,
-		"role":     credential.Role.Code,
-		"uuid":     uuid.New().String(),
+		"id":        credential.Id,
+		"profileId": credential.ProfileId,
+		"email":     credential.Email,
+		"userName":  credential.Username,
+		"role":      credential.Role.Code,
+		"uuid":      uuid.New().String(),
 	})
 	if errToken != nil {
 		response.ServerError(w, r, errToken)
@@ -109,11 +110,12 @@ func (l *loginController) LoginToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newToken, errToken := l.tokenUtils.CreateToken(map[string]interface{}{
-		"id":       credential.Id,
-		"email":    credential.Email,
-		"userName": credential.Username,
-		"role":     credential.Role.Code,
-		"uuid":     uuid.New().String(),
+		"id":        credential.Id,
+		"profileId": credential.ProfileId,
+		"email":     credential.Email,
+		"userName":  credential.Username,
+		"role":      credential.Role.Code,
+		"uuid":      uuid.New().String(),
 	})
 	if errToken != nil {
 		response.ServerError(w, r, errToken)

@@ -2,6 +2,7 @@ package impl_service
 
 import (
 	"account-service/dto/request"
+	"account-service/dto/response"
 	message_error "account-service/messageError"
 	"account-service/model"
 	"account-service/repository"
@@ -33,6 +34,11 @@ func (a *accountService) AddAccountToProject(req request.AddAccountToProject) (p
 
 	newProjectProfle, errProjectProfile := a.accountRepo.AddAccountToProject(req.JoinedId, req.ProjectId)
 	return newProjectProfle, errProjectProfile
+}
+
+func (a *accountService) GetUserProject(projectId uint) (userOfProjects []response.UserOfProject, err error) {
+	listUserOfProject, errListUserOfProject := a.accountRepo.GetUserProject(projectId)
+	return listUserOfProject, errListUserOfProject
 }
 
 func AccountServiceInit() service.AccountService {
